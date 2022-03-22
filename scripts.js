@@ -30,6 +30,15 @@ jQuery(function ($) {
                 mediaArray = [];
                 mediaArray.push(selected);
             } else {
+                if (e.shiftKey) { //Shift+Ctrl key event
+                    $(this).prevAll('.image-checkbox').each(function () {
+                        if ($(this).is('.image-checkbox-checked')) {
+                            return false; // next parent reached, stop
+                        }
+                        $(this).addClass('image-checkbox-checked');
+                        mediaArray.push($(this).find('img').attr('su-media-id'));
+                    });
+                }
                 if (mediaArray.indexOf(selected) === -1) {
                     mediaArray.push(selected);
                 }
@@ -44,4 +53,5 @@ jQuery(function ($) {
         //console.log(isMultipleAllowed);
         e.preventDefault();
     });
+
 });
