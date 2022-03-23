@@ -1,7 +1,14 @@
 jQuery(function ($) {
+    let sort = 1;
+    $('.image-checkbox').each(function () {
+        $(this).attr('jms-sort', sort);
+        sort++;
+    });
+
     var mediaArray = [];
     var selectedMediasId;
     var isMultipleAllowed = false;
+    var prevItem = null;
     $('#allowmultiple').click(function () {
         isMultipleAllowed = $('#allowmultiple').is(':checked') ? true : false;
         $('.image-checkbox-checked').each(function () {
@@ -9,12 +16,13 @@ jQuery(function ($) {
         });
         mediaArray = [];
         $('#selectedmediapreview').html('');
+        prevItem = null;
     });
 
 
     $(".image-checkbox").on("click", function (e) {
         var selected = $(this).find('img').attr('su-media-id');
-        //console.log(selected);
+
         if ($(this).hasClass('image-checkbox-checked')) {
             $(this).removeClass('image-checkbox-checked');
             // remove deselected item from array
@@ -31,19 +39,30 @@ jQuery(function ($) {
                 mediaArray.push(selected);
             } else {
                 if (e.shiftKey) { //Shift+Ctrl key event
-                    $(this).prevAll('.image-checkbox').each(function () {
-                        if ($(this).is('.image-checkbox-checked')) {
-                            return false; // next parent reached, stop
-                        }
-                        $(this).addClass('image-checkbox-checked');
-                        mediaArray.push($(this).find('img').attr('su-media-id'));
-                    });
-                }
-                if (mediaArray.indexOf(selected) === -1) {
-                    mediaArray.push(selected);
+                    var psort = $(prevItem).attr('jms-sort');
+                    var nsort = $(this).attr('jms-sort');
+                    var d = 0;
+                    console.log(psort);
+                    if (psort !== 'undefined') {
+                        d = nsort - psort;
+                    };
+                    if (d < 0) {
+                        $(prevItem).prevUntil(this).each(function () {
+                            $(this).addClass('image-checkbox-checked');
+                        });
+                    } else {
+                        $(prevItem).nextUntil(this).each(function () {
+                            $(this).addClass('image-checkbox-checked');
+                        });
+                    }
                 }
             }
             $(this).addClass('image-checkbox-checked');
+            prevItem = $(this);
+            mediaArray = [];
+            $('.image-checkbox-checked').each(function () {
+                mediaArray.push(($(this).find('img').attr('su-media-id')));
+            });
         }
         //console.log(selected);
         console.log(mediaArray);
