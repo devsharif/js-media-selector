@@ -8,6 +8,7 @@
   <li>Select single/multiple images</li>
   <li>Get selected image id by comma separated or array and pass them to server</li>
   <li>Quick toggle for single/multiple selection</li>
+  <li>Select multiple items at a time by <strong>Shift+Ctrl key</strong></li>
   <li>Get selected item as array/comma separated string</li>
   <li>Can be send data server-side easily</li>
 </ul>
